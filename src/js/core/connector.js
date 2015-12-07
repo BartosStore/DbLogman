@@ -44,23 +44,26 @@ class Connector extends BaseComponent {
       index = index + 1;
 
       return (
-        <Record
-          index={index}
-          aid={obj.aid}
-          usr={obj.usr}
-          dat={obj.dat}
-          moc={obj.moc}
-          acc={obj.acc} />
+        <tr>
+          <td>{index}</td>
+          <td>{obj.aid}</td>
+          <td>{obj.usr}</td>
+          <td>{obj.dat}</td>
+          <td>{obj.moc}</td>
+          <td>{obj.acc}</td>
+        </tr>
       );
     });
 
     return (
-      <div>
+      <div onClick={this.handleClick.bind(this)}>
         <hr />
         <h2>{this.props.label}</h2>
-        DB data...
+        {this.state.text}
         <br />
-        {nodes}
+        <table style={tableStyle}>
+          {nodes}
+        </table>
         <hr />
       </div>
     );
