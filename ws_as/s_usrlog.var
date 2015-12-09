@@ -1,0 +1,42 @@
+/*==========================================================================================================*/
+/* (c) ApSo                                                                                                 */
+/*..........................................................................................................*/
+/* main program name : s_usrlog.p                                                                           */
+/* function          : Definice TT pro detail prihlaseni a odhlaseni uzivatelu                              */
+/* generate date     : 30.11.2015                                                                           */
+/* author            : MiBa                                                                                 */
+/*----------------------------------------------------------------------------------------------------------*/
+/* date of changes   : who        : why the hell                                                            */
+/*..........................................................................................................*/
+/*==========================================================================================================*/
+
+/*
+  ------ parameters ------
+  ------------------------
+  *&tt-name=          - jmeno temp table
+
+Pozn.: * - povinný parametr
+*/
+
+/* -
+   - whisaur1.p - iInpIdAkc - 106
+   -
+   -
+   - == pole TT ==
+   - aid - action ID
+   - usr - User - uzivatel, iniciator akce
+   - dat - Date - datum provedeni akce
+   - moc - Module caption - popisek k modulu
+   - acc - Action caption - popisek k akci
+   - */
+
+
+&IF DEFINED(tt-name) &THEN
+  DEFINE temp-table {&tt-name} NO-UNDO
+  FIELD aid LIKE his_akce.iIdHisto
+  FIELD usr LIKE his_akce.cuziakce
+  FIELD dat AS character
+  FIELD moc LIKE hismodpr.cpopisek
+  FIELD acc LIKE hisproak.cpopakce
+  INDEX ID aid.
+&ENDIF
