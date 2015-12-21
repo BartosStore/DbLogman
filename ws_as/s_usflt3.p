@@ -1,8 +1,8 @@
 /*==========================================================================================================*/
 /* (c) ApSo                                                                                                 */
 /*..........................................................................................................*/
-/* main program name : s_getact.p                                                                           */
-/* function          : Program volany z webspeedu (swusrlog.p)                                              */
+/* main program name : s_usrflt3.p                                                                          */
+/* function          : Zpracovani dat pro AS (s_usrflt2.p) a dale na WS                                     */
 /* generate date     : 03.12.2015                                                                           */
 /* author            : MiBa                                                                                 */
 /*----------------------------------------------------------------------------------------------------------*/
@@ -12,11 +12,24 @@
 
 {{gen_ver.num "g_prggl.var"}}
 
-{./var/s_usrlog.var
-  &tt-name = "ttUser"
+{./var/s_usfltr.var
+  &tt-name = "ttFltr"
 }
 
-define input param iocuser as c.
-define output param table for ttUser.
+/* -- vypis input/output parametru pro dynamickou zmenu -- */
+def output param table for ttFltr.
 
-run s_usrdat(input iocuser, output table ttUser).
+/* ------------------------------------------------------- */
+for each ttFltr:
+  delete ttFltr.
+end.
+
+for each m_usrtab where
+  m_usrtab.ucje = getucje('m_usrtab') no-lock:
+
+    create ttFltr.
+    assign
+      ttFltr.lname = m_usrtab.login-name
+      ttFltr.lnam2 = m_usrtab.login-name.
+
+end.

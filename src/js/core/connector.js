@@ -2,36 +2,52 @@ import React from 'react';
 import gener from './gener';
 import BaseComponent from './baseComponent';
 
-import Record from './record';
+import TableContent from './table_content';
 
 var tableStyle = {
   border: '1px solid black'
 };
 
+var config = {
+  ttFiltr: [
+    {
+      cExample: ''
+    }
+  ]
+};
+
 class Connector extends BaseComponent {
   constructor() {
-      super();
-      this.state = {
-        text: 'DB data...',
-        isActive: false,
-        logInfo: []
-      };
+    super();
+    this.state = {
+      text: 'DB data...',
+      isActive: false,
+      logData: []
+    };
   }
 
   componentDidMount() {
-      var url = 'http://kryton/cgi-bin/wspd_cgi.sh/swusrlog';
-      var jsonData = '';
+    var
+      url = 'http://kryton/cgi-bin/wspd_cgi.sh/swusrlog',
+      jsonData = '',
+      ttFiltr = config.ttFiltr;
 
-      gener.setLogin('vaso', '2222', 'apso');
+    ttFiltr[0].cUserFltr = 'miba';
 
-      gener.sendRequest(
-        url,
-        (data) => {
-            jsonData = gener.getParam(data, 'ttUser');
+    gener.addParams([
+      {name: 'ttFiltr', data: ttFiltr}
+    ]);
 
-            this.setState({logInfo: jsonData});
-        }
-      );
+    gener.setLogin('vaso', '2222', 'apso');
+
+    gener.sendRequest(
+      url,
+      (data) => {
+        jsonData = gener.getParam(data, 'ttUser');
+
+        this.setState({logData: jsonData});
+      }
+    );
   }
 
   handleClick() {
@@ -39,31 +55,27 @@ class Connector extends BaseComponent {
   }
 
   render() {
-    var index = 0;
-    var nodes = this.state.logInfo.map(function mapInfoToComponent(obj) {
-      index = index + 1;
-
-      return (
-        <tr>
-          <td>{index}</td>
-          <td>{obj.aid}</td>
-          <td>{obj.usr}</td>
-          <td>{obj.dat}</td>
-          <td>{obj.moc}</td>
-          <td>{obj.acc}</td>
-        </tr>
-      );
-    });
-
     return (
       <div onClick={this.handleClick.bind(this)}>
         <hr />
         <h2>{this.props.label}</h2>
         {this.state.text}
-        <br />
-        <table style={tableStyle}>
-          {nodes}
+        {this.props.selectedUser}
+
+        <table>
+          <thead>
+          <tr>
+            <th>index</th>
+            <th>action ID</th>
+            <th>user</th>
+            <th>date & time</th>
+            <th>module caption</th>
+            <th>action caption</th>
+          </tr>
+          </thead>
+          <TableContent data={this.state.logData} />
         </table>
+
         <hr />
       </div>
     );

@@ -16,11 +16,12 @@
   &tt-name = "ttUser"
 }
 
+def input param iocuser as c.
+
 /* -- vypis input/output parametru pro dynamickou zmenu -- */
 def output param table for ttUser.
 
 /* ------------------------------------------------------- */
-
 for each ttUser:
   delete ttUser.
 end.
@@ -28,6 +29,7 @@ end.
 for each his_akce where
   his_akce.ucje = getucje('his_akce') and
   his_akce.iidprogr = 12 and
+  his_akce.cuziakce = iocuser and
   his_akce.ddatakce > 10/31/2015 no-lock,
 
   first hismodpr where

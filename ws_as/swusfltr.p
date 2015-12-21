@@ -1,9 +1,9 @@
 /*------------------------------------------------------------------------
-    File        : swusrlog.p
-    Purpose     : Get data from application server for logman app
+    File        : swusfltr.p
+    Purpose     : Get users from m_usrtab for logman app
     Description :
     Author(s)   : miba
-    Created     : 30.11.2015
+    Created     : 14.12.2015
   ----------------------------------------------------------------------*/
 {{gen_ver.num "g_ws.var"}}
 
@@ -12,16 +12,11 @@
    -- ale i na aplikacnim serveru, kde se predava jako parametr;
    -- */
 
-{./var/s_usrlog.var
-  &tt-name="ttUser"
-}
-
-{./var/s_usrpar.var
-  &tt-name="ttFiltr"
+{./var/s_usfltr.var
+  &tt-name="ttFltr"
 }
 
 def var cttdata as longchar no-undo.
-def var iocuser as c no-undo init "jaru".
 
 {{gen_ver.num "g_wsblk.i"}
   &spec-akt = "run specakt."
@@ -33,44 +28,18 @@ def var iocuser as c no-undo init "jaru".
 PROCEDURE specakt:
   do on error undo, return error return-value:
     /* ---------------------------------------------------------------------- */
-
     /* -
-       - prijde input v podobe jsonu
-       - je to TT s nazvem ttFilter
-       - to, co prislo, prirad do cttdata
-       - */
-    run getwebcontextparam(
-      {&TYPETT_INPUT_JSON_PARAM},
-      temp-table ttFiltr:name,
-      output cttdata
-    ).
-
-    /* -
-       - z cttdata precti json data a uloz je ve formatu longchar do ttFiltr
-       - */
-    temp-table ttFiltr:read-json('longchar':u, cttdata).
-
-    /* -
-       - vytahni z TT uzivatele
-       - */
-    for each ttFiltr:
-      iocuser = ttFiltr.cuserfltr.
-    end.
-
-    /*message 'miba> ttFiltr: ' ttFiltr.cuserfltr view-as alert-box.*/
-
-    /* -
-       - volej AS a filtruj podle uzivatele z TT
+       - volej AS a vrat uzivatele z m_usrtab
        - */
     /* ---------------------------------------------------------------------- */
-    run s_getact.p on {&APPSRV} (input string(iocuser), output table ttUser).
+    run s_usflt2.p on {&APPSRV} (output table ttFltr).
     /* ---------------------------------------------------------------------- */
 
-    temp-table ttUser:write-json('longchar':u, cttdata).
+    temp-table ttFltr:write-json('longchar':u, cttdata).
 
     run addwebcontextparam(
       {&TYPETT_OUTPUT_JSON_PARAM},
-      temp-table ttUser:name,
+      temp-table ttFltr:name,
       cttdata
     ).
     /* ---------------------------------------------------------------------- */

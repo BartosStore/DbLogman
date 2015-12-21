@@ -1,2 +1,5 @@
 dist/
 ./*.js
+
+src/js/core/gener.js
+src/js/core/baseComponent.js

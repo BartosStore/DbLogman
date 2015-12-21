@@ -9,22 +9,22 @@ var recordStyle = {
 
 class Record extends BaseComponent {
   constructor() {
-      super();
-      this.state = {
-      };
+    super();
+    this.state = {
+    };
   }
 
   render() {
-      return (
-        <div style={recordStyle}>
-          <h2>ID akce: {this.props.aid}</h2>
-          <b>{this.props.moc}</b>; {this.props.acc}
-          <br />
-          Uzivatel: <b>{this.props.usr}</b>
-          <br />
-          Datum a cas: <b>{this.props.dat}</b>
-        </div>
-      );
+    return (
+      <div style={recordStyle}>
+        <h2>ID akce: {this.props.aid}</h2>
+        <b>{this.props.moc}</b>; {this.props.acc}
+        <br />
+        Uzivatel: <b>{this.props.usr}</b>
+        <br />
+        Datum a cas: <b>{this.props.dat}</b>
+      </div>
+    );
   }
 }
 

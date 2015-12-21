@@ -1,9 +1,9 @@
 /*==========================================================================================================*/
 /* (c) ApSo                                                                                                 */
 /*..........................................................................................................*/
-/* main program name : s_getact.p                                                                           */
-/* function          : Program volany z webspeedu (swusrlog.p)                                              */
-/* generate date     : 03.12.2015                                                                           */
+/* main program name : s_usrflt2.p                                                                          */
+/* function          : Program volany z webspeedu (swusfltr.p)                                              */
+/* generate date     : 14.12.2015                                                                           */
 /* author            : MiBa                                                                                 */
 /*----------------------------------------------------------------------------------------------------------*/
 /* date of changes   : who        : why the hell                                                            */
@@ -12,11 +12,10 @@
 
 {{gen_ver.num "g_prggl.var"}}
 
-{./var/s_usrlog.var
-  &tt-name = "ttUser"
+{./var/s_usfltr.var
+  &tt-name = "ttFltr"
 }
 
-define input param iocuser as c.
-define output param table for ttUser.
+define output param table for ttFltr.
 
-run s_usrdat(input iocuser, output table ttUser).
+run s_usflt3(output table ttFltr).
