@@ -2,13 +2,21 @@ import React from 'react';
 import BaseComponent from './baseComponent';
 import Combobox from 'react-select';
 import UserButton from 'react-button';
-import Connector from './connector';
 import gener from './gener';
+import TableContent from './table_content';
 
-function logChange(object) {
-  console.log('Selected: ' + object);
-  sessionStorage.selectedUser = object.value;
-}
+var filterStyle = {
+  border: '1px solid red',
+  width: '100px'
+};
+
+var config = {
+  ttFiltr: [
+    {
+      cExample: ''
+    }
+  ]
+};
 
 class Selector extends BaseComponent {
   constructor() {
@@ -17,7 +25,8 @@ class Selector extends BaseComponent {
     this.state = {
       text: 'Selector text...',
       availableUsers: [],
-      userFilter: ''
+      userFilter: '',
+      logData: []
     };
   }
 
@@ -44,7 +53,38 @@ class Selector extends BaseComponent {
 
   handleButtonClick() {
     console.log('miba:handleButtonClick> ' + sessionStorage.selectedUser);
-    this.setState({userFilter: sessionStorage.selectedUser});
+
+    this.getLogData();
+    /*this.setState({userFilter: sessionStorage.selectedUser});*/
+  }
+
+  logChange(object) {
+    console.log('Selected: ' + object.value);
+    sessionStorage.selectedUser = object.value;
+  }
+
+  getLogData() {
+    var
+      url = 'http://kryton/cgi-bin/wspd_cgi.sh/swusrlog',
+      jsonData = '',
+      ttFiltr = config.ttFiltr;
+
+    ttFiltr[0].cUserFltr = sessionStorage.selectedUser;
+
+    gener.addParams([
+      {name: 'ttFiltr', data: ttFiltr}
+    ]);
+
+    gener.setLogin('vaso', '2222', 'apso');
+
+    gener.sendRequest(
+      url,
+      (data) => {
+        jsonData = gener.getParam(data, 'ttUser');
+
+        this.setState({logData: jsonData});
+      }
+    );
   }
 
   render() {
@@ -59,19 +99,23 @@ class Selector extends BaseComponent {
 
         <label htmlFor="userInput"><h3>{this.props.comboLabel}</h3></label>
         <Combobox
-          ref="combobox"
+          addLabelText="TEST"
           autofocus
-          clearable={true}
+          clearable={false}
           name="selected-user"
           options={this.state.availableUsers}
-          onChange={logChange}
+          onChange={this.logChange}
           placeholder="Select user:" />
 
         <UserButton onClick={this.handleButtonClick}>Send</UserButton>
         <br />
         {this.state.userFilter}
 
-        <Connector label="Welcome to Connector space" selectedUser={this.state.userFilter} />
+        <div style={filterStyle}>
+          state.userFilter: <b>{this.state.userFilter}</b>
+        </div>
+
+        <TableContent data={this.state.logData} />
       </div>
     );
   }

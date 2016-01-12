@@ -26,9 +26,26 @@ class TableContent extends BaseComponent {
     });
 
     return (
-      <tbody>
-        {nodes}
-      </tbody>
+      <div>
+        <hr />
+        <table>
+          <thead>
+          <tr>
+            <th>index</th>
+            <th>action ID</th>
+            <th>user</th>
+            <th>date & time</th>
+            <th>module caption</th>
+            <th>action caption</th>
+          </tr>
+          </thead>
+
+          <tbody>
+            {nodes}
+          </tbody>
+        </table>
+        <hr />
+      </div>
     );
   }
 }
