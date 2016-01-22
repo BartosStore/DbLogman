@@ -10,6 +10,24 @@ var filterStyle = {
   width: '100px'
 };
 
+var comboboxStyle = {
+  margin: 'auto',
+  width: '300px'
+};
+
+var tableContentStyle = {
+  margin: 'auto'
+}
+
+var theme = {
+  style: { borderRadius: '5px', width: '80px' },
+  disabledStyle: { background: 'gray'},
+  overStyle: { background: '#fafafa', color: 'black'},
+  activeStyle: { background: '#e5e5e5' },
+  pressedStyle: {background: 'magenta', fontWeight: 'bold'},
+  overPressedStyle: {background: 'purple', fontWeight: 'bold'}
+}
+
 var config = {
   ttFiltr: [
     {
@@ -21,12 +39,13 @@ var config = {
 class Selector extends BaseComponent {
   constructor() {
     super();
+    this.logChange = this.logChange.bind(this);
     this.handleButtonClick = this.handleButtonClick.bind(this);
     this.state = {
-      text: 'Selector text...',
       availableUsers: [],
       userFilter: '',
-      logData: []
+      logData: [],
+      selectValue: {"label":"a-hla", "value":"a-hla"}
     };
   }
 
@@ -47,20 +66,17 @@ class Selector extends BaseComponent {
     );
   }
 
+  logChange(object) {
+    console.log('Selected: ' + object.value);
+    this.setState({selectValue: object.value});
+  }
+
   handleComponentClick() {
     this.setState({text: 'I saw you! You clicked on Selector component!'});
   }
 
   handleButtonClick() {
-    console.log('miba:handleButtonClick> ' + sessionStorage.selectedUser);
-
     this.getLogData();
-    /*this.setState({userFilter: sessionStorage.selectedUser});*/
-  }
-
-  logChange(object) {
-    console.log('Selected: ' + object.value);
-    sessionStorage.selectedUser = object.value;
   }
 
   getLogData() {
@@ -69,7 +85,7 @@ class Selector extends BaseComponent {
       jsonData = '',
       ttFiltr = config.ttFiltr;
 
-    ttFiltr[0].cUserFltr = sessionStorage.selectedUser;
+    ttFiltr[0].cUserFltr = this.state.selectValue;
 
     gener.addParams([
       {name: 'ttFiltr', data: ttFiltr}
@@ -92,30 +108,25 @@ class Selector extends BaseComponent {
       <div onClick={this.handleComponentClick.bind(this)}>
         <hr />
 
-        <h2>{this.props.label}</h2>
-        {this.state.text}
-        <br />
-        <br />
+        <h2>{this.props.comboLabel}</h2>
 
-        <label htmlFor="userInput"><h3>{this.props.comboLabel}</h3></label>
-        <Combobox
-          addLabelText="TEST"
-          autofocus
-          clearable={false}
-          name="selected-user"
-          options={this.state.availableUsers}
-          onChange={this.logChange}
-          placeholder="Select user:" />
+          <Combobox
+            name="selected-user"
+            ref="userSelect"
+            placeholder="Select user for filtering:"
+            style={comboboxStyle}
+            autofocus
+            options={this.state.availableUsers}
+            value={this.state.selectValue}
+            onChange={this.logChange}
+            clearable={true}
+            searchable={true} />
 
-        <UserButton onClick={this.handleButtonClick}>Send</UserButton>
-        <br />
-        {this.state.userFilter}
+          <UserButton theme={theme} onClick={this.handleButtonClick}>Send</UserButton>
+          <br />
+          {this.state.userFilter}
 
-        <div style={filterStyle}>
-          state.userFilter: <b>{this.state.userFilter}</b>
-        </div>
-
-        <TableContent data={this.state.logData} />
+        <TableContent style={tableContentStyle} data={this.state.logData} />
       </div>
     );
   }

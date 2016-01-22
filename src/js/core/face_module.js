@@ -5,11 +5,7 @@ class FaceModule extends React.Component {
   render() {
     return (
       <div>
-        State: {this.props.status}
-        <br />
-
-        <Selector label="Welcome to Selector space" comboLabel="User filter" />
-        <br />
+        <Selector comboLabel="User filter" />
       </div>
     );
   }

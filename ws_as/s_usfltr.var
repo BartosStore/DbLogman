@@ -1,0 +1,31 @@
+/*==========================================================================================================*/
+/* (c) ApSo                                                                                                 */
+/*..........................................................................................................*/
+/* main program name : s_usrlog.p                                                                           */
+/* function          : Definice TT pro regitrovane uzivatele - Logman app                                   */
+/* generate date     : 14.12.2015                                                                           */
+/* author            : MiBa                                                                                 */
+/*----------------------------------------------------------------------------------------------------------*/
+/* date of changes   : who        : why the hell                                                            */
+/*..........................................................................................................*/
+/*==========================================================================================================*/
+
+/*
+  ------ parameters ------
+  ------------------------
+  *&tt-name=          - jmeno temp table
+
+Pozn.: * - povinnì parametr
+*/
+
+/* -
+   - == pole TT ==
+   - lname - action - login-name
+   - */
+
+&IF DEFINED(tt-name) &THEN
+  DEFINE temp-table {&tt-name} NO-UNDO
+  FIELD lname LIKE m_usrtab.login-name serialize-name 'label':u
+  FIELD lnam2 LIKE m_usrtab.login-name serialize-name 'value':u
+  INDEX Login-Name lname.
+&ENDIF

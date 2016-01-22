@@ -9,20 +9,25 @@ class TableContent extends BaseComponent {
   }
 
   render() {
+
+    console.log('==============================================');
+    console.log('TableContent ' + this.props.data);
+    if (this.props.data === '{}') {console.log('<<<<<<<<<<')} {console.log('>>>>>>>>>>')};
+
     var index = 0;
     var nodes = this.props.data.map(function mapDataToComponent(obj) {
       index = index + 1;
 
-      return (
-        <tr>
-          <td>{index}</td>
-          <td>{obj.aid}</td>
-          <td>{obj.usr}</td>
-          <td>{obj.dat}</td>
-          <td>{obj.moc}</td>
-          <td>{obj.acc}</td>
-        </tr>
-      );
+        return (
+          <tr>
+            <td>{index}</td>
+            <td>{obj.aid}</td>
+            <td>{obj.usr}</td>
+            <td>{obj.dat}</td>
+            <td>{obj.moc}</td>
+            <td>{obj.acc}</td>
+          </tr>
+        );
     });
 
     return (
